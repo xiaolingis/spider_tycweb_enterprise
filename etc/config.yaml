@@ -2,7 +2,7 @@ SERVER:
   NAME: Spider_TYC_Enterprise
   VERSION: 1.0.0
   DEBUG: True
-  KEYS: 俄陆通,渊祥环保
+  KEYS: 环保设备
   RUN_MODE: single
 
 

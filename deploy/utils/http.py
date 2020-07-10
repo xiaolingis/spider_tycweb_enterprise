@@ -49,9 +49,7 @@ def api_post(url, headers={}, data={},
         else:
             print('@'*100)
             random_ip = get_random_proxy()
-            proxies = {
-                'http': random_ip
-            }
+            proxies = {'http': random_ip} if random_ip else {}
             response = requests.post(url=url, headers=headers,
                                      data=data, timeout=5, proxies=proxies)
     except Exception as e:
@@ -101,9 +99,7 @@ def api_get(url,  headers={}, data={},
                                     data=data, timeout=5)
         else:
             random_ip = get_random_proxy()
-            proxies = {
-                'http': random_ip
-            }
+            proxies = {'http': random_ip} if random_ip else {}
             response = requests.get(url=url, headers=headers,
                                     data=data, timeout=5, proxies=proxies)
     except Exception as e:
@@ -131,5 +127,8 @@ def get_random_proxy():
     get random proxy from proxypool
     :return: proxy
     """
-    res = requests.get(PROXY_API)
-    return res.text.strip() if res.status_code ==200 else ''
+    try:
+        res = requests.get(PROXY_API)
+        return res.text.strip() if res.status_code ==200 else ''
+    except:
+        return ''
