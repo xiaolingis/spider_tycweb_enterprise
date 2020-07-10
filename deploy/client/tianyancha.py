@@ -44,7 +44,6 @@ class TianYanChaClient(object):
             "Cookie": TYC_COOKIE,
             "Connection": "keep-alive",
             "Sec-Fetch-Dest": "document",
-            # "X-Forwarded-For":
         }
 
     def work_by_key(self, key):
@@ -78,7 +77,8 @@ class TianYanChaClient(object):
                 print(res_dict['name'], res_dict['tyt_url'], True if res_dict else False)
                 ret_res.append(res_dict)
                 random_sleep()
-
+            #     break
+            # break
         return ret_res
 
 

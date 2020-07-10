@@ -21,7 +21,12 @@ import requests
 import json
 
 
-def api_post(url, headers, data, retry=1, resptype='json'):
+from deploy.config import IS_PROXY_RUN, PROXY_API
+from deploy.utils.utils import random_sleep
+
+
+def api_post(url, headers={}, data={},
+             retry=1, resptype='json', **kwargs):
     """
     http post
     :param url: url
@@ -38,10 +43,20 @@ def api_post(url, headers, data, retry=1, resptype='json'):
         headers = json.dumps(headers)
 
     try:
-        response = requests.post(url=url, headers=headers,
-                                 data=data, timeout=5)
+        if not IS_PROXY_RUN:
+            response = requests.post(url=url, headers=headers,
+                                     data=data, timeout=5)
+        else:
+            print('@'*100)
+            random_ip = get_random_proxy()
+            proxies = {
+                'http': random_ip
+            }
+            response = requests.post(url=url, headers=headers,
+                                     data=data, timeout=5, proxies=proxies)
     except Exception as e:
         if retry <= 3:
+            random_sleep(1, 1.5)
             api_post(url=url,
                      headers=headers,
                      data=data,
@@ -63,7 +78,8 @@ def api_post(url, headers, data, retry=1, resptype='json'):
             return True, response.text
 
 
-def api_get(url, headers, data, retry=1, resptype='json'):
+def api_get(url,  headers={}, data={},
+            retry=1, resptype='json', **kwargs):
     """
     http get
     :param url: url
@@ -80,10 +96,19 @@ def api_get(url, headers, data, retry=1, resptype='json'):
         headers = json.dumps(headers)
 
     try:
-        response = requests.get(url=url, headers=headers,
-                                data=data, timeout=5)
+        if not IS_PROXY_RUN:
+            response = requests.get(url=url, headers=headers,
+                                    data=data, timeout=5)
+        else:
+            random_ip = get_random_proxy()
+            proxies = {
+                'http': random_ip
+            }
+            response = requests.get(url=url, headers=headers,
+                                    data=data, timeout=5, proxies=proxies)
     except Exception as e:
         if retry <= 3:
+            random_sleep(1, 1.5)
             api_get(url, headers, data, retry=retry + 1, resptype='json')
         else:
             raise Exception(u'api_get error: %s' % e)
@@ -99,3 +124,12 @@ def api_get(url, headers, data, retry=1, resptype='json'):
             return True, response.json()
         else:
             return True, response.text
+
+
+def get_random_proxy():
+    """
+    get random proxy from proxypool
+    :return: proxy
+    """
+    res = requests.get(PROXY_API)
+    return res.text.strip() if res.status_code ==200 else ''

@@ -82,12 +82,16 @@ OUTPUT_BASE_DIR = __get_excel_dir()
 
 # store
 STORE_EXCEL = True
-STORE_DB = True
+STORE_DB = False
 
 #apis
 TYC_SEARCH_API = None
 TYC_DETAIL_API = None
 TYC_COOKIE = None
+
+# proxy
+PROXY_API = None
+IS_PROXY_RUN = False
 
 
 """
@@ -138,3 +142,7 @@ with open(_config_file) as f:
     TYC_SEARCH_API = _config_info['APIS']['TYC_SEARCH'] or TYC_SEARCH_API
     TYC_DETAIL_API = _config_info['APIS']['TYC_DETAIL'] or TYC_DETAIL_API
     TYC_COOKIE = _config_info['APIS']['TYC_COOKIE'] or TYC_COOKIE
+
+    # proxy
+    PROXY_API = _config_info['PROXY']['API'] or PROXY_API
+    IS_PROXY_RUN = _config_info['PROXY']['IS_RUN'] or IS_PROXY_RUN
