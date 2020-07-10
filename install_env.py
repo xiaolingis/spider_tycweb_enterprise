@@ -128,7 +128,7 @@ Also, make test will automatically use the virtualenv.
 
     def install_venv(self):
         _print_message("Create .venv ......")
-        cmd = ['virtualenv', '-q', '--no-site-packages', '--python=python2.7', self.venv]
+        cmd = ['virtualenv', '-q', '--no-site-packages', '--python=python3.7', self.venv]
         _print_message('.Venv is create ok.', t='important') \
             if self.run_command(cmd, shell=False) == 0 \
             else self.die('.Venv is create failure.')
@@ -190,7 +190,7 @@ Also, make test will automatically use the virtualenv.
         self._pip_install_package('setuptools')
         self._pip_install_package('pbr')
         self._pip_install_requirements()
-        self._pip_install_core()
+        # self._pip_install_core()
 
 
 def _get_cur_folder():
@@ -216,17 +216,17 @@ def _print_message(message, t="default"):
     :return: 
     """
     if t == 'error':
-        print "%s\n%s\n%s" % ("* " * 20, message, "* " * 20)
+        print("%s\n%s\n%s" % ("* " * 20, message, "* " * 20))
     elif t == 'important':
-        print "%s\n%s\n%s" % ("= " * 20, message, "= " * 20)
+        print("%s\n%s\n%s" % ("= " * 20, message, "= " * 20))
     else:
-        print message
+        print(message)
 
 
 def main():
     py_version = python_version()
-    if py_version > MAX_PYTHON_VERSION:
-        _print_message("Current is high, please use Python2.X.X", t="error")
+    if py_version < MAX_PYTHON_VERSION:
+        _print_message("Current is low, please use Python3.X.X", t="error")
         os._exit(0)
 
     base_dir = _get_cur_folder()
