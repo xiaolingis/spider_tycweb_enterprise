@@ -47,7 +47,6 @@ def api_post(url, headers={}, data={},
             response = requests.post(url=url, headers=headers,
                                      data=data, timeout=5)
         else:
-            print('@'*100)
             random_ip = get_random_proxy()
             proxies = {'http': random_ip} if random_ip else {}
             response = requests.post(url=url, headers=headers,

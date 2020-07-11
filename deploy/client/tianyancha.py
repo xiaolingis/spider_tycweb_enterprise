@@ -43,7 +43,7 @@ class TianYanChaClient(object):
             "Host": "www.tianyancha.com",
             "Cookie": TYC_COOKIE,
             "Connection": "keep-alive",
-            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Dest": "document"
         }
 
     def work_by_key(self, key):
@@ -60,7 +60,7 @@ class TianYanChaClient(object):
                                   data={},
                                   resptype='text')
             if not is_ok:
-                return []
+                continue
 
             soup = BeautifulSoup(search_resp, 'lxml')
             tags = soup.find_all('a',attrs={"tyc-event-ch": "CompanySearch.Company"})
