@@ -84,7 +84,7 @@ class SpiderTYCClass(BASECLASS):
         os._exit(0)
 
     def _print_info(self, message):
-        LOG.info('=' * 10 + message + '=' * 10)
+        LOG.info('=' * 20 + message + '=' * 20)
 
     def single_run(self):
         for key in self.keys:

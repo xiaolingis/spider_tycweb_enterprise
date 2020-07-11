@@ -31,6 +31,7 @@ class TianYanChaClient(object):
     """
     tianyancha client
     """
+
     def __init__(self):
         super(object, self).__init__()
         self.MAX_PAGE = 5
@@ -55,15 +56,16 @@ class TianYanChaClient(object):
         # page
         for page in range(0, self.MAX_PAGE, 1):
             url = TYC_SEARCH_API + '/p%s?key=' % page + parse.quote(key)
+            print(url)
             is_ok, search_resp = api_get(url=url,
-                                  headers=self.headers,
-                                  data={},
-                                  resptype='text')
+                                         headers=self.headers,
+                                         data={},
+                                         resptype='text')
             if not is_ok:
                 continue
 
             soup = BeautifulSoup(search_resp, 'lxml')
-            tags = soup.find_all('a',attrs={"tyc-event-ch": "CompanySearch.Company"})
+            tags = soup.find_all('a', attrs={"tyc-event-ch": "CompanySearch.Company"})
             for tag in tags:
                 if not tag or not tag.attrs.get('href'):
                     continue
@@ -74,13 +76,12 @@ class TianYanChaClient(object):
 
                 detail_res = self.detail_by_url(res_dict.get('tyt_url'))
                 res_dict.update(detail_res)
-                print(res_dict['name'], res_dict['tyt_url'], True if res_dict else False)
+                print(res_dict['name'], res_dict['tyt_url'], str(True if res_dict else False))
                 ret_res.append(res_dict)
                 random_sleep()
-            #     break
-            # break
+                #     break
+                # break
         return ret_res
-
 
     def detail_by_url(self, comp_url: str):
         detail_res = dict()
@@ -88,9 +89,9 @@ class TianYanChaClient(object):
             return detail_res
 
         is_ok, search_resp = api_get(url=comp_url,
-                              headers=self.headers,
-                              data={},
-                              resptype='text')
+                                     headers=self.headers,
+                                     data={},
+                                     resptype='text')
         if not is_ok:
             return detail_res
 
@@ -169,43 +170,36 @@ class TianYanChaClient(object):
                                 for index_tr, tr in enumerate(child_1_1.find_all('tr')):
                                     if index_tr == 0:
                                         for index_td, td in enumerate(tr.find_all('td')):
-                                            if index_td == 1:   # 注册资本
+                                            if index_td == 1:  # 注册资本
                                                 detail_res['register_funds'] = td.get_text().strip() or '-'
-                                            elif index_td == 3: # 实缴资金
-                                                detail_res['paidin_funds'] =  td.get_text().strip() or '-'
+                                            elif index_td == 3:  # 实缴资金
+                                                detail_res['paidin_funds'] = td.get_text().strip() or '-'
                                     elif index_tr == 1:
                                         for index_td, td in enumerate(tr.find_all('td')):
-                                            if index_td == 1:   # 注册资本
+                                            if index_td == 1:  # 注册资本
                                                 detail_res['establish_date'] = td.get_text().strip() or '-'
-                                            elif index_td == 3: # 经营状态
-                                                detail_res['status'] =  td.get_text().strip() or '-'
+                                            elif index_td == 3:  # 经营状态
+                                                detail_res['status'] = td.get_text().strip() or '-'
                                     elif index_tr == 2:
                                         for index_td, td in enumerate(tr.find_all('td')):
-                                            if index_td == 1:   # 注册资本
+                                            if index_td == 1:  # 注册资本
                                                 detail_res['credit_code'] = td.get_text().strip() or '-'
                                     elif index_tr == 4:
                                         for index_td, td in enumerate(tr.find_all('td')):
-                                            if index_td == 1:   # 公司类型
+                                            if index_td == 1:  # 公司类型
                                                 detail_res['company_type'] = td.get_text().strip() or '-'
-                                            elif index_td == 3: # 行业
-                                                detail_res['industry'] =  td.get_text().strip() or '-'
+                                            elif index_td == 3:  # 行业
+                                                detail_res['industry'] = td.get_text().strip() or '-'
                                     elif index_tr == 6:
                                         for index_td, td in enumerate(tr.find_all('td')):
-                                            if index_td == 1:   # 营业期限
+                                            if index_td == 1:  # 营业期限
                                                 detail_res['business_term'] = td.get_text().strip() or '-'
                                     elif index_tr == 10:
                                         for index_td, td in enumerate(tr.find_all('td')):
-                                            if index_td == 1:   # 经营范围
+                                            if index_td == 1:  # 经营范围
                                                 detail_res['business_scope'] = td.get_text().strip() or '-'
 
                         break
                 break
 
         return detail_res
-
-
-
-
-
-
-
